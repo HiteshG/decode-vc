@@ -12,7 +12,7 @@ import { Document, Page, pdfjs } from "react-pdf";
 
 import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
 import json from 'react-syntax-highlighter/dist/esm/languages/hljs/json';
-import { zenburn,arta,docco, an_old_hope, darcula, prism, } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import { zenburn,arta,docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
 
 import "react-pdf/dist/Page/AnnotationLayer.css";
