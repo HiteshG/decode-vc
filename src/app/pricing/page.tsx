@@ -21,16 +21,16 @@ const Page = async () => {
 
   const pricingItems = [
     {
-      plan: "Free",
-      tagline: "For small side projects.",
-      quota: 10,
+      plan: "Starter",
+      tagline: "For micro-VC funds",
+      quota: 40,
       features: [
         {
-          text: "5 pages per PDF",
+          text: "10 pages per PDF",
           footnote: "The maximum amount of pages per PDF-file.",
         },
         {
-          text: "4MB file size limit",
+          text: "10MB file size limit",
           footnote: "The maximum file size of a single PDF file.",
         },
         {
@@ -49,7 +49,7 @@ const Page = async () => {
     },
     {
       plan: "Pro",
-      tagline: "For larger projects with higher needs.",
+      tagline: "For larger size VC funds with higher needs.",
       quota: PLANS.find((p) => p.slug === "pro")!.quota,
       features: [
         {
@@ -57,7 +57,7 @@ const Page = async () => {
           footnote: "The maximum amount of pages per PDF-file.",
         },
         {
-          text: "16MB file size limit",
+          text: "30MB file size limit",
           footnote: "The maximum file size of a single PDF file.",
         },
         {
