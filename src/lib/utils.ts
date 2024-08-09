@@ -15,10 +15,10 @@ export function absoluteUrl(path: string) {
 }
 
 export function constructMetadata({
-  title = "DecodeVC - the SaaS for VC",
-  description = "DecodeVC is an open-source software to make chatting to your PDF files easy.",
-  image = "/thumbnail.png",
-  icons = "/favicon.ico",
+  title = "DecodeVC - The SaaS for VC",
+  description = "DecodeVC is an software to make deck data enrich.",
+  image = "/decode.ico",
+  icons = "/decode.ico",
   noIndex = false
 }: {
   title?: string
@@ -47,6 +47,6 @@ export function constructMetadata({
       creator: "@thequantumcoder"
     },
     icons,
-    metadataBase: new URL('https://quill-six-mocha.vercel.app'),
+    metadataBase: new URL('https://decodevc.com'),
   }
 }
