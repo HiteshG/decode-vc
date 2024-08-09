@@ -72,10 +72,7 @@ const Dashboard = ({ isSubscribed }: { isSubscribed: boolean }) => {
                     <Plus className="h-4 w-4" />
                     {format(file.createdAt, "MMM yyyy")}
                   </div>
-                  <div className="flex items-center gap-2">
-                    <MessageSquare className="h-4 w-4" />
-                    mocked
-                  </div>
+                  <br></br>
                   <Button
                     size="sm"
                     className="w-full active:scale-90 transition-all duration-200 hover:opacity-90"

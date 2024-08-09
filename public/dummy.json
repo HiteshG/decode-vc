@@ -1,0 +1,36 @@
+{
+    "companyName": "TechCorp Inc.",
+    "industry": "Software Development",
+    "foundedYear": 2010,
+    "employees": 500,
+    "revenue": "$50M",
+    "keyProducts": [
+      "CloudSuite",
+      "DataAnalyzer",
+      "AIAssistant"
+    ],
+    "competitors": [
+      "BigTech Co.",
+      "InnovaSoft",
+      "DataGurus Ltd."
+    ],
+    "marketShare": "15%",
+    "growthRate": "22% YoY",
+    "fundingRounds": [
+      {
+        "series": "A",
+        "year": 2012,
+        "amount": "$5M"
+      },
+      {
+        "series": "B",
+        "year": 2015,
+        "amount": "$20M"
+      },
+      {
+        "series": "C",
+        "year": 2018,
+        "amount": "$50M"
+      }
+    ]
+  }

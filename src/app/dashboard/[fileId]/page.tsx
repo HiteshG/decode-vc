@@ -41,9 +41,10 @@ const DashboardFileId = async({ params: { fileId } }: Props) => {
           </div>
         </div>
 
-        <div className="shrink-0 flex-[0.75] border-t border-gray-200 lg:w-96 lg:border-l lg:border-t-0">
+        {/* right side */}
+        {/* <div className="shrink-0 flex-[0.75] border-t border-gray-200 lg:w-96 lg:border-l lg:border-t-0">
           <ChatWrapper fileId={ file.id } isSubscribed={plan.isSubscribed} />
-        </div>
+        </div> */}
         
       </div>
     </div>

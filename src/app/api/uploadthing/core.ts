@@ -82,7 +82,7 @@ const onUploadComplete = async ({ metadata, file }: {
 
     // vectorise and index entire document
 
-    const pineconeIndex = pinecone.Index("quill");
+    const pineconeIndex = pinecone.Index("decodevc");
 
     const embeddings = new OpenAIEmbeddings({
       openAIApiKey: process.env.OPENAI_API_KEY
