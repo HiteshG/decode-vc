@@ -181,7 +181,7 @@ const UploadButton = ({ isSubscribed }: { isSubscribed: boolean }) => {
             variant="defaultBlack"
             onClick={() => setIsOpen(true)}
           >
-            Upload PDF
+            Upload Deck
           </Button>
         </DialogTrigger>
       </HoverShine>

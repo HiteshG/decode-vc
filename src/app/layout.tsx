@@ -7,6 +7,7 @@ import 'react-loading-skeleton/dist/skeleton.css';
 import "simplebar-react/dist/simplebar.min.css";
 import "./globals.css";
 import Footer from "@/components/footer";
+import ConditionalFooter from '@/components/conditionalFooter';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,7 +24,7 @@ export default function RootLayout({
         <Providers>
           <Navbar/>
           {children}
-          <Footer />
+          <ConditionalFooter />
         </Providers>
       </body>
     </html>

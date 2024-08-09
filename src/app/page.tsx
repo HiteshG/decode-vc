@@ -10,18 +10,17 @@ export default function Home() {
       <MaxWidthWrapper className='mb-12 mt-28 sm:mt-40 flex flex-col items-center justify-center text-center'>
         <div className='mx-auto mb-4 flex max-w-fit items-center justify-center space-x-2 overflow-hidden rounded-full border border-gray-200 bg-white px-7 py-2 shadow-md backdrop-blur transition-all hover:border-gray-300 hover:bg-white/50'>
           <p className='text-sm font-semibold text-gray-700'>
-            DecodeVC is now public!
+            🚀 Supercharge your Associates
           </p>
         </div>
         <h1 className='max-w-4xl text-5xl font-bold md:text-6xl lg:text-7xl'>
-          Chat with your{' '}
-          <span className='text-blue-600'>documents</span>{' '}
+          Beyond the deck data{' '}
+          <span className='text-blue-600'>enrich</span>{' '}
           in seconds.
         </h1>
         <p className='mt-5 max-w-prose text-zinc-700 sm:text-lg'>
-          DecodeVC allows you to have conversations with pitch deck
-          PDF document. Simply upload your file and start
-          asking questions right away.
+          DecodeVC allows you to extract data from Startup websites, LinkedIn profiles, and News pulses. 
+          Simply upload your file and start enrichment.
         </p>
 
         <Link
@@ -87,10 +86,10 @@ export default function Home() {
         <div className='mb-12 px-6 lg:px-8'>
           <div className='mx-auto max-w-2xl sm:text-center'>
             <h2 className='mt-2 font-bold text-4xl text-gray-900 sm:text-5xl'>
-              Start chatting in minutes
+              From Unstructured date to Unstoppable
             </h2>
             <p className='mt-4 text-lg text-gray-600'>
-              Chatting to your PDF files has never been
+              Assessing the pitch deck has never been
               easier than with DecodeVC.
             </p>
           </div>
@@ -138,7 +137,7 @@ export default function Home() {
                 Step 3
               </span>
               <span className='text-xl font-semibold'>
-                Start asking questions
+                Enrichment
               </span>
               <span className='mt-2 text-zinc-700'>
                 It&apos;s that simple. Try out DecodeVC today -
