@@ -61,16 +61,7 @@ const PdfRenderer = ({ url, fileId }: PdfRendererProps) => {
   };
 
   const { data: enrichmentData, isLoading: isLoadingEnrichment } = trpc.getFileEnrichData.useQuery(
-    { fileId },
-    {
-      onError: (err) => {
-        toast({
-          title: 'Error fetching enrichment data',
-          description: err.message,
-          variant: 'destructive',
-        });
-      },
-    }
+    { fileId }
   );
 
   return (
