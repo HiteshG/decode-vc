@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 import { ChevronDown, ChevronUp, Loader2, RotateCw, Search } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import SimpleBar from "simplebar-react";
-import PdfFullscreen from "./PdfFullscreen";
+import PdfFullscreen from "./PdfFullScreen";
 import { useToast } from "./ui/use-toast";
 import { trpc } from "@/app/_trpc/client";
 import EnrichmentDisplay from './EnrichmentDisplay';
