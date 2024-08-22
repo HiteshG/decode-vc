@@ -78,7 +78,6 @@ const UploadDropzone = ({ isSubscribed }: { isSubscribed: boolean }) => {
 
           const [fileResponse] = res;
           const key = fileResponse?.key;
-          const id = fileResponse?.id
 
           if (!key) {
             throw new Error('No file key returned');
