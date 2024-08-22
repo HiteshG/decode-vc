@@ -16,7 +16,9 @@ import { cn } from "../lib/utils";
 
 const UploadDropzone = ({ isSubscribed }: { isSubscribed: boolean }) => {
   const [isUploading, setIsUploading] = useState(false);
+  const [isEnriching, setIsEnriching] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [enrichProgress, setEnrichProgress] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
 
   const router = useRouter();
@@ -27,21 +29,17 @@ const UploadDropzone = ({ isSubscribed }: { isSubscribed: boolean }) => {
     isSubscribed ? "proPlanUploader" : "freePlanUploader"
   );
 
-  const startSimulatedProgress = () => {
-    console.log("startSimulatedProgress");
-    setUploadProgress(0);
-
+  const startSimulatedProgress = (setter: React.Dispatch<React.SetStateAction<number>>) => {
+    setter(0);
     const interval = setInterval(() => {
-      setUploadProgress((prev) => {
-        console.log("setUploadProgress", prev);
+      setter((prev) => {
         if (prev >= 95) {
           clearInterval(interval);
           return prev;
         }
         return prev + 5;
       });
-    }, 500);
-
+    }, 1000);
     return interval;
   };
 
@@ -64,40 +62,68 @@ const UploadDropzone = ({ isSubscribed }: { isSubscribed: boolean }) => {
       onDrop={async (acceptedFile) => {
         setIsHovering(false);
         setIsUploading(true);
-        const progressInterval = startSimulatedProgress();
+        const uploadProgressInterval = startSimulatedProgress(setUploadProgress);
 
-        // handle file uploading
-        const res = await startUpload(acceptedFile);
+        try {
+          const res = await startUpload(acceptedFile);
 
-        if (!res) {
-          // Most likely timeout. Todo: handle this better
-          await new Promise((resolve) => setTimeout(resolve, 2000));
-          window.location.reload();
-          return;
+          if (!res) {
+            throw new Error('Upload failed');
+          }
 
-          return toast({
-            title: "Something went wrong",
-            description: "Please try again later",
-            variant: "destructive",
+          const [fileResponse] = res;
+          const key = fileResponse?.key;
+          const id = fileResponse?.id
+
+          if (!key) {
+            throw new Error('No file key returned');
+          }
+
+          clearInterval(uploadProgressInterval);
+          setUploadProgress(100);
+          setIsUploading(false);
+
+          // Start enrichment process
+          setIsEnriching(true);
+          const enrichProgressInterval = startSimulatedProgress(setEnrichProgress);
+
+          const enrichResponse = await fetch('/api/enrich', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ fileUrl: fileResponse.url, fileKey: fileResponse.key }),
           });
-        }
+          
+          if (!enrichResponse.ok) {
+            throw new Error('Enrichment process failed');
+          }
 
-        const [fileResponse] = res;
-        const key = fileResponse?.key;
+          clearInterval(enrichProgressInterval);
+          setEnrichProgress(100);
 
-        if (!key) {
-          return toast({
-            title: "Something went wrong",
-            description: "Please try again later",
-            variant: "destructive",
+          toast({
+            title: 'File uploaded and enriched successfully',
+            description: 'Your file has been processed and is ready to view.',
+            variant: 'default',
           });
+
+          startPolling({ key });
+
+          // Delay redirect to show 100% progress
+          // setTimeout(() => {
+          //   router.push(`/dashboard/${fileResponse.id}`);
+          // }, 1000);
+
+        } catch (error) {
+          console.error('Error in upload and enrich process:', error);
+          toast({
+            title: 'Error',
+            description: error instanceof Error ? error.message : 'There was a problem with the upload or enrichment process.',
+            variant: 'destructive',
+          });
+        } finally {
+          setIsUploading(false);
+          setIsEnriching(false);
         }
-
-        startPolling({ key });
-
-        clearInterval(progressInterval);
-        console.log("setUploadProgress", 100);
-        setUploadProgress(100);
       }}
     >
       {({ getRootProps, getInputProps, acceptedFiles }) => (
@@ -123,7 +149,7 @@ const UploadDropzone = ({ isSubscribed }: { isSubscribed: boolean }) => {
                   and drop
                 </p>
                 <p className="text-xs text-zinc-500">
-                  PDF (up to {isSubscribed ? "16" : "4"}MB)
+                  PDF (up to {isSubscribed ? "32" : "16"}MB)
                 </p>
               </div>
 
@@ -138,23 +164,21 @@ const UploadDropzone = ({ isSubscribed }: { isSubscribed: boolean }) => {
                 </div>
               ) : null}
 
-              {isUploading ? (
+              {(isUploading || isEnriching) && (
                 <div className="mx-auto mt-4 w-full max-w-xs">
                   <Progress
                     indicatorColor={
-                      uploadProgress === 100 ? "bg-green-500" : ""
+                      (isUploading && uploadProgress === 100) || (isEnriching && enrichProgress === 100) ? "bg-green-500" : ""
                     }
-                    value={uploadProgress}
+                    value={isUploading ? uploadProgress : enrichProgress}
                     className="h-1 w-full"
                   />
-                  {uploadProgress === 100 ? (
-                    <div className="flex items-center justify-center gap-1 pt-2 text-center text-sm text-zinc-700">
-                      <Loader2Icon className="h-3 w-3 animate-spin" />
-                      Redirecting…
-                    </div>
-                  ) : null}
+                  <div className="flex items-center justify-center gap-1 pt-2 text-center text-sm text-zinc-700">
+                    <Loader2Icon className="h-3 w-3 animate-spin" />
+                    {isUploading ? 'Uploading...' : 'AI Enriching will take some time...'}
+                  </div>
                 </div>
-              ) : null}
+              )}
 
               <input
                 type="file"
