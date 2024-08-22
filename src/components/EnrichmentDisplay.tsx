@@ -61,7 +61,7 @@ const EnrichmentDisplay: React.FC<EnrichmentDisplayProps> = ({ enrichmentStatus,
     </div>
   );
 
-  const formatFundingType = (fundingType) => {
+  const formatFundingType = ({fundingType}: {fundingType: string}) => {
     if (!fundingType) return '';
     return fundingType
       .split('_')
@@ -165,7 +165,7 @@ const EnrichmentDisplay: React.FC<EnrichmentDisplayProps> = ({ enrichmentStatus,
             </tr>
           </thead>
           <tbody>
-            {financials.projections.map((item, index) => (
+            {financials.projections.map((item: any, index: any) => (
               <tr key={index}>
                 <td>{item.year}</td>
                 <td>{item.revenue}</td>
@@ -190,7 +190,7 @@ const EnrichmentDisplay: React.FC<EnrichmentDisplayProps> = ({ enrichmentStatus,
         <p><span className="font-medium">Number of Funding Rounds:</span> {funding.num_funding_rounds}</p>
         
         <h4 className="font-semibold mt-4">Funding Rounds:</h4>
-        {funding.funding_rounds.map((round, index) => (
+        {funding.funding_rounds.map((round: any, index: any) => (
           <div key={index} className="ml-4">
             <p><span className="font-medium">{round.round_name}</span></p>
             <p>Amount: {round.amount} {round.currency}</p>
@@ -203,7 +203,7 @@ const EnrichmentDisplay: React.FC<EnrichmentDisplayProps> = ({ enrichmentStatus,
         <p>Number of Investors: {investors.num_investors}</p>
         <p>Number of Lead Investors: {investors.num_lead_investors}</p>
         <ul className="list-disc pl-5">
-          {investors.investor_list.map((investor, index) => (
+          {investors.investor_list.map((investor: any, index: any) => (
             <li key={index}>{investor.name} {investor.is_lead_investor ? '(Lead)' : ''}</li>
           ))}
         </ul>
