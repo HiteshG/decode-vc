@@ -13,6 +13,7 @@ import { useState } from "react";
 import Dropzone, { useDropzone } from "react-dropzone";
 import { HoverShine } from "./HoverShine";
 import { cn } from "../lib/utils";
+import { AppRouter } from "@/trpc";
 
 const UploadDropzone = ({ isSubscribed }: { isSubscribed: boolean }) => {
   const [isUploading, setIsUploading] = useState(false);
@@ -43,9 +44,13 @@ const UploadDropzone = ({ isSubscribed }: { isSubscribed: boolean }) => {
     return interval;
   };
 
-  const { mutate: startPolling } = trpc.getFile.useMutation({
+  const { mutate: startPolling } = trpc.getFile.useMutation<AppRouter['getFile']>({
+    
     onSuccess: (file) => {
-      router.push(`/dashboard/${file.id}`);
+      console.log(file)
+      if (file && file.id) {
+        router.push(`/dashboard/${file.id}`);
+      }
     },
     retry: true,
     retryDelay: 500,

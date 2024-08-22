@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
     // Call AWS Lambda function
     const lambdaResponse = await axios.get(lambdaUrl);
     const enrichedData = lambdaResponse.data;
-    console.log('Received enriched data:', JSON.stringify(enrichedData).slice(0, 200) + '...');
+    // console.log('Received enriched data:', JSON.stringify(enrichedData).slice(0, 200) + '...');
 
     // First, try to select the record using the key
     let { data: existingRecord, error: selectError } = await supabase
@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
       .eq('key', fileKey)
       .single()
 
-    console.log('Existing record:', existingRecord);
+    // console.log('Existing record:', existingRecord);
 
     if (selectError) {
       console.error('Error selecting record:', selectError);
@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
       throw error;
     }
 
-    console.log('Updated Supabase record:', data);
+    // console.log('Updated Supabase record:', data);
 
     return NextResponse.json({ success: true, data: enrichedData });
     
