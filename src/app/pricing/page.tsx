@@ -80,7 +80,7 @@ const Page = async () => {
         <div className="mx-auto mb-10 sm:max-w-lg">
           <h1 className="text-6xl font-bold sm:text-7xl">Pricing</h1>
           <p className="mt-5 text-gray-600 sm:text-lg">
-           Don't think it is costly, we got web, linkedin, crunchbase premium data at your services.
+           Don&lsquo;t think it is costly, we got web, linkedin, crunchbase premium data at your services.
           </p>
         </div>
 
