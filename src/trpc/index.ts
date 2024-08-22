@@ -14,6 +14,11 @@ import {
   stripe,
 } from '@/lib/stripe'
 import { PLANS } from '@/config/stripe'
+import { createClient } from '@supabase/supabase-js';
+import prisma from '@/db'
+
+const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
+
 
 export const appRouter = router({
   authCallback: publicProcedure.query(async () => {
@@ -61,6 +66,62 @@ export const appRouter = router({
       },
     })
   }),
+  getFileEnrichData: privateProcedure
+  .input(z.object({ fileId: z.string() }))
+  .query(async ({ ctx, input }) => {
+    const { userId } = ctx
+    const { fileId } = input
+
+    try {
+      const file = await prisma.file.findFirst({
+        where: {
+          id: fileId,
+          userId,
+        },
+      })
+
+      if (!file) {
+        throw new TRPCError({ 
+          code: 'NOT_FOUND', 
+          message: 'File not found in database' 
+        })
+      }
+
+      // Fetch enrichment data from Supabase
+      const { data, error } = await supabase
+        .from('File')
+        .select('enrich_data')
+        .eq('id', fileId)
+        .single()
+
+      if (error) {
+        console.error('Supabase error:', error)
+        throw new TRPCError({ 
+          code: 'INTERNAL_SERVER_ERROR', 
+          message: `Error fetching data from Supabase: ${error.message}` 
+        })
+      }
+
+      if (!data || !data.enrich_data) {
+        throw new TRPCError({ 
+          code: 'NOT_FOUND', 
+          message: 'Enrichment data not found for this file' 
+        })
+      }
+
+      return { enrichData: data.enrich_data }
+    } catch (error) {
+      console.error('Error in getFileEnrichData:', error)
+      if (error instanceof TRPCError) {
+        throw error
+      }
+      throw new TRPCError({ 
+        code: 'INTERNAL_SERVER_ERROR', 
+        message: 'An unexpected error occurred' 
+      })
+    }
+  }),
+
 
   createStripeSession: privateProcedure.mutation(
     async ({ ctx }) => {
@@ -225,6 +286,7 @@ export const appRouter = router({
 
       return file
     }),
+    
 })
 
 export type AppRouter = typeof appRouter

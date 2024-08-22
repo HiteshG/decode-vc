@@ -26,18 +26,18 @@ const Page = async () => {
       quota: 40,
       features: [
         {
-          text: "10 pages per PDF",
+          text: "30 pages per PDF",
           footnote: "The maximum amount of pages per PDF-file.",
         },
         {
-          text: "10MB file size limit",
+          text: "16MB file size limit",
           footnote: "The maximum file size of a single PDF file.",
         },
         {
           text: "Mobile-friendly interface",
         },
         {
-          text: "Higher-quality responses",
+          text: "More enrichment data-points",
           footnote: "Better algorithmic responses for enhanced content quality",
           negative: true,
         },
@@ -53,18 +53,18 @@ const Page = async () => {
       quota: PLANS.find((p) => p.slug === "pro")!.quota,
       features: [
         {
-          text: "25 pages per PDF",
+          text: "50 pages per PDF",
           footnote: "The maximum amount of pages per PDF-file.",
         },
         {
-          text: "30MB file size limit",
+          text: "50MB file size limit",
           footnote: "The maximum file size of a single PDF file.",
         },
         {
           text: "Mobile-friendly interface",
         },
         {
-          text: "Higher-quality responses",
+          text: "More enrichment data-points ",
           footnote: "Better algorithmic responses for enhanced content quality",
         },
         {
@@ -80,10 +80,8 @@ const Page = async () => {
         <div className="mx-auto mb-10 sm:max-w-lg">
           <h1 className="text-6xl font-bold sm:text-7xl">Pricing</h1>
           <p className="mt-5 text-gray-600 sm:text-lg">
-            Whether you&apos;re just trying out our service or need more,
-            we&apos;ve got you covered.
+           Don&lsquo;t think it is costly, we got web, linkedin, crunchbase premium data at your services.
           </p>
-          <CopyCardNumber/>
         </div>
 
         <div className="pt-12 grid grid-cols-1 gap-10 lg:grid-cols-2">
