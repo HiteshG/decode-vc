@@ -2,22 +2,76 @@
 
 import { trpc } from "@/app/_trpc/client";
 import UploadButton from "./UploadButton";
-import { Ghost, Loader2, MessageSquare, Plus, TrashIcon } from "lucide-react";
+import { Ghost, Loader2, Plus, TrashIcon } from "lucide-react";
 import Skeleton from "react-loading-skeleton";
 import Link from "next/link";
 import { format } from "date-fns";
 import { Button } from "./ui/button";
 import { useState } from "react";
 
+// Updated File type to match the actual structure
+type File = {
+  id: string;
+  name: string;
+  createdAt: string; // Changed from Date to string
+  key: string;
+  uploadStatus: string;
+  url: string;
+  updatedAt: string;
+  enrich_data: any; // You might want to define a more specific type for this
+};
+
+const FileItem = ({ file, onDelete, isDeleting }: { file: File; onDelete: () => void; isDeleting: boolean }) => (
+  <li className="col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow transition hover:shadow-lg">
+    <Link href={`/dashboard/${file.id}`} className="flex flex-col gap-2">
+      <div className="pt-6 px-6 flex w-full items-center justify-between space-x-6">
+        <div
+          aria-hidden
+          className="h-10 w-10 flex-shrink-0 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500"
+        />
+        <div className="flex-1 truncate">
+          <div className="flex items-center space-x-3">
+            <h3 className="truncate text-lg font-medium text-zinc-900">
+              {file.name}
+            </h3>
+          </div>
+        </div>
+      </div>
+    </Link>
+    <div className="px-6 mt-4 grid grid-cols-3 place-items-center py-2 gap-6 text-xs text-zinc-500">
+      <div className="flex items-center gap-2">
+        <Plus className="h-4 w-4" />
+        {format(new Date(file.createdAt), "MMM yyyy")}
+      </div>
+      <br />
+      <Button
+        size="sm"
+        className="w-full active:scale-90 transition-all duration-200 hover:opacity-90"
+        variant="destructive"
+        onClick={onDelete}
+      >
+        {isDeleting ? (
+          <Loader2 className="h-4 w-4 animate-spin" />
+        ) : (
+          <TrashIcon className="h-4 w-4" />
+        )}
+      </Button>
+    </div>
+  </li>
+);
+
 const Dashboard = ({ isSubscribed }: { isSubscribed: boolean }) => {
-  const [currentlyDeletingFile, setCurrentlyDeletingFile] = useState<
-    string | null
-  >(null);
-  const { data: files, isLoading } = trpc.getUserFiles.useQuery();
+  const [currentlyDeletingFile, setCurrentlyDeletingFile] = useState<string | null>(null);
+  
+  // Simplify the query call
+  const { data, isLoading } = trpc.getUserFiles.useQuery();
+
+  // Use type assertion after receiving the data
+  const files = data as File[] | undefined;
 
   const utils = trpc.useUtils();
 
-  const { mutate: deleteFile, data } = trpc.deleteFile.useMutation({
+  const { mutate: deleteFile } = trpc.deleteFile.useMutation({
     onSuccess: () => {
       utils.getUserFiles.invalidate();
     },
@@ -36,57 +90,17 @@ const Dashboard = ({ isSubscribed }: { isSubscribed: boolean }) => {
         <UploadButton isSubscribed={isSubscribed} />
       </div>
 
-      {files && files.length !== 0 ? (
+      {files && files.length > 0 ? (
         <ul className="mt-8 grid grid-cols-1 gap-6 divide-y divide-zinc-200 md:grid-cols-2 lg:grid-cols-3">
           {files
-            .sort(
-              (a, b) =>
-                new Date(b.createdAt).getTime() -
-                new Date(a.createdAt).getTime()
-            )
+            .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
             .map((file) => (
-              <li
+              <FileItem
                 key={file.id}
-                className="col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow transition hover:shadow-lg"
-              >
-                <Link
-                  href={`/dashboard/${file.id}`}
-                  className="flex flex-col gap-2"
-                >
-                  <div className="pt-6 px-6 flex w-full items-center justify-between space-x-6">
-                    <div
-                      aria-hidden
-                      className="h-10 w-10 flex-shrink-0 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500"
-                    />
-                    <div className="flex-1 truncate">
-                      <div className="flex items-center space-x-3">
-                        <h3 className="truncate text-lg font-medium text-zinc-900">
-                          {file.name}
-                        </h3>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-                <div className="px-6 mt-4 grid grid-cols-3 place-items-center py-2 gap-6 text-xs text-zinc-500">
-                  <div className="flex items-center gap-2">
-                    <Plus className="h-4 w-4" />
-                    {format(file.createdAt, "MMM yyyy")}
-                  </div>
-                  <br></br>
-                  <Button
-                    size="sm"
-                    className="w-full active:scale-90 transition-all duration-200 hover:opacity-90"
-                    variant="destructive"
-                    onClick={() => deleteFile({ id: file.id })}
-                  >
-                    {currentlyDeletingFile === file.id ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                    ) : (
-                      <TrashIcon className="h-4 w-4" />
-                    )}
-                  </Button>
-                </div>
-              </li>
+                file={file}
+                onDelete={() => deleteFile({ id: file.id })}
+                isDeleting={currentlyDeletingFile === file.id}
+              />
             ))}
         </ul>
       ) : isLoading ? (
